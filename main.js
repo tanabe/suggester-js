@@ -7,6 +7,9 @@ window.onload = function() {
   var lastWord = "";
 
   var showSuggestions = function(list) {
+    while (suggestions.hasChildNodes()) {
+      suggestions.removeChild(suggestions.firstChild);
+    }
     if (list.length > 0) {
       //create list
       var html = "";
@@ -18,13 +21,12 @@ window.onload = function() {
 
         };
         suggestions.appendChild(item);
-        //html += ["<li>", list[i], "</li>"].join("");
       }
 
       //show
-      //suggestions.innerHTML = html;
       suggestions.style.display = "block";
     } else {
+      //hide
       suggestions.style.display = "none";
     }
   }
