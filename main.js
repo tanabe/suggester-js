@@ -2,7 +2,7 @@ window.onload = function() {
   var suggester = new Suggester();
   suggester.initialize(list);
 
-  var input = document.getElementById("userInput");
+  var userInput = document.getElementById("userInput");
   var suggestions = document.getElementById("suggestions");
   var lastWord = "";
 
@@ -17,7 +17,7 @@ window.onload = function() {
         var item = document.createElement("li")
         item.innerHTML = list[i];
         item.onclick = function() {
-          input.value = this.innerHTML;
+          userInput.value = this.innerHTML;
 
         };
         suggestions.appendChild(item);
@@ -27,16 +27,40 @@ window.onload = function() {
       suggestions.style.display = "block";
     } else {
       //hide
-      suggestions.style.display = "none";
+      hideSuggestions();
+    }
+  }
+
+  var hideSuggestions = function() {
+    suggestions.style.display = "none";
+  };
+
+  var search = function() {
+    if (lastWord !== userInput.value) {
+      var list = suggester.search(userInput.value);
+      showSuggestions(list);
+      lastWord = userInput.value;
     }
   }
 
   //polling
-  var polling = setInterval(function() {
-    if (lastWord !== input.value) {
-      var list = suggester.search(input.value);
-      showSuggestions(list);
-      lastWord = input.value;
-    }
-  }, 500);
+  var polling;
+  var closeTimer;
+  polling = setInterval(search, 500);
+
+  /*
+  userInput.onblur = function() {
+    closeTimer = setInterval(hideSuggestions, 500);
+    //hideSuggestions();
+    lastWord = "";
+    clearInterval(polling);
+  };
+
+  userInput.onfocus = function() {
+    clearInterval(closeTimer);
+    polling = setInterval(search, 500);
+    search();
+  };
+  */
+
 };
